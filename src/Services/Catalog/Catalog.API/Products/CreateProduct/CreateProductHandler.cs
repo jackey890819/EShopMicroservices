@@ -1,9 +1,4 @@
-﻿using BuildingBlocks.CQRS;
-using Catalog.API.Models;
-using MediatR;
-
-namespace Catalog.API.Products.CreateProduct;
-
+﻿namespace Catalog.API.Products.CreateProduct;
 
 /// <summary>
 /// CQRS Handler 使用的 Command Query
@@ -22,7 +17,7 @@ public record CreateProductCommand(string Name, List<string> Category, string De
 /// <param name="Id"></param>
 public record CreateProductResult(Guid Id);
 
-internal class CreateProductHandler
+internal class CreateProductCommandHandler(IDocumentSession session)
     : ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
@@ -31,7 +26,7 @@ internal class CreateProductHandler
         //throw new NotImplementedException();
 
         // 1. Create Product entity from command object
-        var product = new Product
+        Product product = new Product
         {
             Name = command.Name,
             Category = command.Category,
@@ -41,8 +36,10 @@ internal class CreateProductHandler
         };
 
         // 2. Save entity to database
+        session.Store(product);
+        await session.SaveChangesAsync(cancellationToken);
 
         // 3. return CreateProductResult
-        return new CreateProductResult(Guid.NewGuid());
+        return new CreateProductResult(product.Id);
     }
 }
