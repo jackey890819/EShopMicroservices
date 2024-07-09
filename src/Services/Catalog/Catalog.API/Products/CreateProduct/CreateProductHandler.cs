@@ -29,12 +29,11 @@ public class CreateProdcutCommandValidator : AbstractValidator<CreateProductComm
 }
 
 internal class CreateProductCommandHandler
-    (IDocumentSession session, ILogger<CreateProductCommandHandler> logger)
+    (IDocumentSession session)
     : ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
-        logger.LogInformation("CreateProductCommandHandler.Handler called with {@command}", command);
         // Business logic to create a product
         //throw new NotImplementedException();
 

@@ -19,14 +19,12 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
 }
 
 internal class UpdateProductCommandHandler
-    (IDocumentSession session, ILogger<UpdateProductCommandHandler> logger)
+    (IDocumentSession session)
     : ICommandHandler<UpdateProductCommand, UpdateProductResult>
 {
     public async Task<UpdateProductResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
         //throw new NotImplementedException();
-        // do logging
-        logger.LogInformation("UpdateProductHandler.Handle called with {@Command}", command);
         // try to find Product by Id
         var product = await session.LoadAsync<Product>(command.Id, cancellationToken);
         // check if product not exist, throw an error
