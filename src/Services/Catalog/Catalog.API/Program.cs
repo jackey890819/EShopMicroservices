@@ -1,6 +1,8 @@
 using BuildingBlocks.Exceptions.Handler;
 using BuildingBlocks.Extentions;
 using Catalog.API.Data;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,8 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("Database")!);
 
 var app = builder.Build();
 
@@ -67,4 +71,9 @@ app.MapCarter(); // 自動Map所有實作了ICarterModule的class
 //    });
 //});
 app.UseExceptionHandler(options => { });
+app.UseHealthChecks("/health",
+    new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
 app.Run();
