@@ -5,7 +5,8 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "catalogdb": "StartDebugging",
-        "catalog.api": "StartDebugging"
+        "catalog.api": "StartDebugging",
+        "basket.api": "StartDebugging"
       }
     }
   }
